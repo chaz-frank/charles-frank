@@ -76,8 +76,10 @@ function runCommand(raw: string): React.ReactNode {
           </span>
         );
       }
-      if ((FILES as readonly string[]).includes(target)) {
-        return FILE_RENDERERS[target as FileName]();
+      const candidates = [target, `${target}.txt`, `${target}.pdf`];
+      const match = candidates.find((c) => (FILES as readonly string[]).includes(c));
+      if (match) {
+        return FILE_RENDERERS[match as FileName]();
       }
       return (
         <span style={{ color: "var(--muted)" }}>
