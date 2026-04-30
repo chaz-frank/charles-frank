@@ -106,7 +106,7 @@ export function Terminal() {
   const [history, setHistory] = useState<string[]>([]);
   const [historyIdx, setHistoryIdx] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const scrollerRef = useRef<HTMLDivElement>(null);
+  const promptRef = useRef<HTMLDivElement>(null);
   const idRef = useRef(0);
 
   useEffect(() => {
@@ -114,7 +114,17 @@ export function Terminal() {
   }, []);
 
   useEffect(() => {
-    scrollerRef.current?.scrollTo({ top: scrollerRef.current.scrollHeight, behavior: "smooth" });
+    let cancelled = false;
+    const start = performance.now();
+    const tick = () => {
+      if (cancelled) return;
+      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "auto" });
+      if (performance.now() - start < 600) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+    return () => {
+      cancelled = true;
+    };
   }, [entries]);
 
   function submit() {
@@ -171,13 +181,11 @@ export function Terminal() {
 
   return (
     <div
-      ref={scrollerRef}
       onClick={() => inputRef.current?.focus()}
       className="terminal-scroller"
       style={{
         minHeight: "100vh",
         cursor: "text",
-        overflowY: "auto",
       }}
     >
       <div style={{ maxWidth: 980, margin: "0 auto" }}>
@@ -195,7 +203,7 @@ export function Terminal() {
           </div>
         ))}
 
-        <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
+        <div ref={promptRef} style={{ display: "flex", alignItems: "center", flexWrap: "wrap", scrollMarginBottom: 24 }}>
           {PROMPT}
           <span style={{ position: "relative", display: "inline-flex", alignItems: "center", flex: 1, minWidth: 0 }}>
             <span style={{ whiteSpace: "pre" }}>{input}</span>
