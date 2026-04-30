@@ -171,9 +171,9 @@ export function Terminal() {
     <div
       ref={scrollerRef}
       onClick={() => inputRef.current?.focus()}
+      className="terminal-scroller"
       style={{
         minHeight: "100vh",
-        padding: "32px 28px 80px",
         cursor: "text",
         overflowY: "auto",
       }}

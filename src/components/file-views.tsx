@@ -202,7 +202,7 @@ export function ProjectsTxt() {
   return (
     <div>
       <SectionHeader id="02" title="projects" />
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+      <div className="projects-grid">
         {resume.projects.map((p, i) => {
           const cardStyle: React.CSSProperties = {
             display: "block",

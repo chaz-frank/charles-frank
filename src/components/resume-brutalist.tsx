@@ -44,10 +44,10 @@ const Tag = ({ children }: { children: React.ReactNode }) => (
 export function ResumeBrutalist() {
   return (
     <div
+      className="resume-sheet"
       style={{
         background: bg,
         color: fg,
-        padding: "32px 44px",
         fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace',
         fontSize: 12,
         lineHeight: 1.45,
@@ -141,7 +141,7 @@ export function ResumeBrutalist() {
         </div>
       </header>
 
-      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 22 }}>
+      <div className="resume-body-grid">
         <div>
           <section style={{ marginBottom: 18 }}>
             <Hx>Professional Experience</Hx>
