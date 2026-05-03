@@ -106,7 +106,6 @@ export function Terminal() {
   const [history, setHistory] = useState<string[]>([]);
   const [historyIdx, setHistoryIdx] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const promptRef = useRef<HTMLDivElement>(null);
   const idRef = useRef(0);
 
   useEffect(() => {
@@ -114,17 +113,11 @@ export function Terminal() {
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
-    const start = performance.now();
-    const tick = () => {
-      if (cancelled) return;
-      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "auto" });
-      if (performance.now() - start < 600) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-    return () => {
-      cancelled = true;
-    };
+    if (entries.length === 0) return;
+    const id = window.setTimeout(() => {
+      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
+    }, 60);
+    return () => window.clearTimeout(id);
   }, [entries]);
 
   function submit() {
@@ -203,7 +196,7 @@ export function Terminal() {
           </div>
         ))}
 
-        <div ref={promptRef} style={{ display: "flex", alignItems: "center", flexWrap: "wrap", scrollMarginBottom: 24 }}>
+        <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
           {PROMPT}
           <span style={{ position: "relative", display: "inline-flex", alignItems: "center", flex: 1, minWidth: 0 }}>
             <span style={{ whiteSpace: "pre" }}>{input}</span>
